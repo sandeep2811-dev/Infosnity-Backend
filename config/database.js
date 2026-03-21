@@ -1,16 +1,26 @@
 import pkg from "pg";
 import 'dotenv/config';
 const { Pool } = pkg;
-const PASSWORD = process.env.password;
-const host = process.env.host;
-const port = process.env.port;
-const database = process.env.database;
-const db= new Pool({
-    user: 'postgres',
-    host: host,
-    database: database,
-    password: PASSWORD,
-    port: port,
-})
+
+// Use the full connection string from Neon/Render
+// If DATABASE_URL isn't found, it will look for your local password as a backup
+const connectionString = process.env.DATABASE_URL;
+
+const db = new Pool({
+    connectionString: connectionString,
+    ssl: {
+        // This is REQUIRED for Neon and other cloud providers
+        rejectUnauthorized: false 
+    }
+});
+
+// Test the connection immediately when the server starts
+db.connect((err) => {
+    if (err) {
+        console.error("❌ Database connection error:", err.stack);
+    } else {
+        console.log("✅ Connected to the Cloud Database successfully.");
+    }
+});
 
 export default db;
