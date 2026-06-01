@@ -227,7 +227,7 @@ const io = new Server(httpServer, {
 /* =========================
    DATABASE
 ========================= */
-db.connect();
+// db.connect();
 
 /* =========================
    MIDDLEWARES & CORS
