@@ -216,13 +216,14 @@ app.set("trust proxy", 1);
 /* =========================
    SOCKET.IO CONFIG
 ========================= */
+
 const io = new Server(httpServer, {
   cors: {
-    origin: ["http://localhost:5173", "https://infstfrtd.vercel.app"],
-    credentials: true,
-    methods: ["GET", "POST"]
+    origin: true,
+    credentials: true
   }
-});
+}
+
 
 /* =========================
    DATABASE
