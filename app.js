@@ -218,10 +218,11 @@ app.set("trust proxy", 1);
 ========================= */
 
 const io = new Server(httpServer, {
-  cors: {
-    origin: true,
-    credentials: true
-  }
+    cors: {
+        origin: true,
+        credentials: true,
+        methods: ["GET", "POST"]
+    }
 });
 
 /* =========================
@@ -232,13 +233,41 @@ const io = new Server(httpServer, {
 /* =========================
    MIDDLEWARES & CORS
 ========================= */
-// Simplified CORS using the library
+/* =========================
+   MIDDLEWARES & CORS
+========================= */
+
 app.use(cors({
-    origin: ["http://localhost:5173", "https://infstfrtd.vercel.app"],
+    origin: (origin, callback) => {
+        // Allow requests without origin (Postman, mobile apps, server-to-server)
+        if (!origin) return callback(null, true);
+
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "https://infty-frontend.vercel.app"
+        ];
+
+        if (
+            allowedOrigins.includes(origin) ||
+            origin.endsWith(".vercel.app")
+        ) {
+            return callback(null, true);
+        }
+
+        return callback(new Error(`CORS blocked: ${origin}`));
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "Authorization"]
+    allowedHeaders: [
+        "Origin",
+        "X-Requested-With",
+        "Content-Type",
+        "Accept",
+        "Authorization"
+    ]
 }));
+
+app.options(/.*/, cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
