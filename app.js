@@ -282,6 +282,26 @@ app.use("/api/v1/hec", hecRoutes);
 app.use("/api/v1/community", communityRoutes); // Fixed route name to match logic
 app.use("/api/v1/classes", classRoutes);
 
+app.get("/db-debug", async (req, res) => {
+  try {
+    const dbName = await db.query("SELECT current_database()");
+    
+    const tables = await db.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema='public'
+      ORDER BY table_name
+    `);
+
+    res.json({
+      database: dbName.rows[0],
+      tables: tables.rows
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 /* =========================
    SOCKET.IO LOGIC
 ========================= */
