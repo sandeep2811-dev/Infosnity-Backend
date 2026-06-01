@@ -55,28 +55,73 @@ const loginUser = async (req, res) => {
 
 
 
+// const registerFaculty = async (req, res) => {
+//   const { name, dept, email, password , role } = req.body;
+
+//   try {
+
+//     const result = await db.query("SELECT email FROM usersfaculty WHERE email = $1", [email]);
+
+//     if (result.rows.length > 0) {
+//       return res.status(400).json({ message: "User already exists." });
+//     }
+
+
+//     await db.query(
+//       "INSERT INTO usersfaculty (name, dept, email, password,role) VALUES ($1, $2, $3, $4,$5)",
+//       [name, dept, email, password, role]
+//     );
+
+//     res.status(201).json({ message: "Registered successfully." });
+
+//   } catch (error) {
+//     console.error("Registration error:", error);
+//     res.status(500).json({ message: "Internal server error." });
+//   }
+// };
 const registerFaculty = async (req, res) => {
-  const { name, dept, email, password , role } = req.body;
+  const { name, dept, email, password, role } = req.body;
 
   try {
 
-    const result = await db.query("SELECT email FROM usersfaculty WHERE email = $1", [email]);
+    const tables = await db.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema='public'
+      ORDER BY table_name
+    `);
+
+    console.log("TABLES:", tables.rows);
+
+    const result = await db.query(
+      "SELECT email FROM public.usersfaculty WHERE email = $1",
+      [email]
+    );
 
     if (result.rows.length > 0) {
-      return res.status(400).json({ message: "User already exists." });
+      return res.status(400).json({
+        message: "User already exists."
+      });
     }
 
-
     await db.query(
-      "INSERT INTO usersfaculty (name, dept, email, password,role) VALUES ($1, $2, $3, $4,$5)",
+      `INSERT INTO public.usersfaculty
+       (name, dept, email, password, role)
+       VALUES ($1, $2, $3, $4, $5)`,
       [name, dept, email, password, role]
     );
 
-    res.status(201).json({ message: "Registered successfully." });
+    return res.status(201).json({
+      message: "Registered successfully."
+    });
 
   } catch (error) {
     console.error("Registration error:", error);
-    res.status(500).json({ message: "Internal server error." });
+
+    return res.status(500).json({
+      error: error.message,
+      code: error.code
+    });
   }
 };
 
