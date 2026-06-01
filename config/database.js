@@ -36,10 +36,7 @@ const db = new Pool({
   },
 });
 
-db.on("error", (err) => {
-  console.error("Unexpected PostgreSQL pool error:", err);
-});
-
+// Test database connection
 (async () => {
   try {
     await db.query("SELECT NOW()");
@@ -48,5 +45,10 @@ db.on("error", (err) => {
     console.error("❌ Database connection error:", err);
   }
 })();
+
+// Handle unexpected pool errors
+db.on("error", (err) => {
+  console.error("Unexpected PostgreSQL pool error:", err);
+});
 
 export default db;
