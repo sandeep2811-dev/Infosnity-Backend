@@ -222,8 +222,7 @@ const io = new Server(httpServer, {
     origin: true,
     credentials: true
   }
-}
-
+});
 
 /* =========================
    DATABASE
