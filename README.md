@@ -196,7 +196,7 @@ This project is licensed under the MIT License.
 
 ## 👤 Author
 
-**Sandeep Kataria**
+**Sandeep Pullareddy**
 - GitHub: [@sandeep2811-dev](https://github.com/sandeep2811-dev)
 
 ## 🌐 Related Projects
