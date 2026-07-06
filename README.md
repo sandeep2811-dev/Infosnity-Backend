@@ -1,6 +1,6 @@
 # Infosnity Backend
 
-A robust Node.js/Express backend service for the Infosnity platform. This server handles API requests, data processing, and business logic for the Infosnity ecosystem.
+A robust Node.js/Express backend service for the Infosnity platform a IIIT Ongole institution project. This server handles API requests, data processing, and business logic for the Infosnity ecosystem.
 
 ## Table of Contents
 
